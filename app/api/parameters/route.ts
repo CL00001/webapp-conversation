@@ -27,7 +27,21 @@ export async function GET(request: NextRequest) {
       'Unable to retrieve Dify application parameters',
   }
 
-  console.error('[Dify parameters]', details)
+  const actualError = error as {
+  name?: string
+  message?: string
+  code?: string
+  cause?: { code?: string; message?: string }
+}
+
+console.error('[Dify parameters]', {
+  ...details,
+  name: actualError.name,
+  actualMessage: actualError.message,
+  errorCode: actualError.code,
+  causeCode: actualError.cause?.code,
+  causeMessage: actualError.cause?.message,
+})
 
   return NextResponse.json(details, { status: 502 })
 }
